@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="tr" class="no-scroll">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Hacked By Strongsaire | Turk Hack Team</title>
+    <link rel="icon" type="image/png" href="https://i.hizliresim.com/m9RCVr.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-bg: #050505;
+            --color-text: #FFFFFF;
+            --color-muted: #A3A3A3;
+            --color-accent: #E30A17;
+            --color-gold: #988568;
+            --color-typewriter: #FFFFFF;
+            --color-overlay-bg: rgba(0, 0, 0, 0.5);
+            --color-card-bg: rgba(10, 10, 10, 0.5);
+            --color-card-border: rgba(255, 255, 255, 0.1);
+            --font-display: 'Unbounded', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition-fast: 0.3s ease;
+            --transition-smooth: 0.5s ease;
+            --radius-sm: 2px;
+            --radius-full: 50%;
+            --z-canvas: 10;
+            --z-content: 20;
+            --z-bubble: 9999;
+            --z-overlay: 99999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-text-size-adjust: 100%;
+
+            /* Scroll bar tamamen gizlendi, kaydırma çalışır */
+            scrollbar-width: none;               /* Firefox */
+            -ms-overflow-style: none;            /* IE/Edge */
+        }
+
+        /* WebKit (Chrome, Safari, yeni Edge) scroll bar gizleme */
+        html::-webkit-scrollbar {
+            display: none;                       /* scrollbar tamamen yok */
+        }
+
+        html.no-scroll,
+        body.no-scroll {
+            overflow: hidden;
+            height: 100%;
+            touch-action: none;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            width: 100%;
+            position: relative;
+            user-select: none;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><line x1='12' y1='3' x2='12' y2='21' stroke='red' stroke-width='2'/><line x1='3' y1='12' x2='21' y2='12' stroke='red' stroke-width='2'/></svg>") 8 8, crosshair;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background-color: var(--color-overlay-bg);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .dark-gradient {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom, var(--color-bg) 0%, transparent 20%, transparent 80%, var(--color-bg) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+        }
+
+        .particle-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: var(--z-canvas);
+            pointer-events: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: var(--z-content);
+            overflow-x: hidden;
+        }
+
+        .click-bubble {
+            position: fixed;
+            pointer-events: none;
+            z-index: var(--z-bubble);
+            border: 1px solid var(--color-accent);
+            border-radius: var(--radius-full);
+            background: rgba(227, 10, 23, 0.12);
+            box-shadow: 0 0 6px rgba(227, 10, 23, 0.6), inset 0 0 4px rgba(255, 0, 0, 0.5);
+            animation: bubblePop 0.5s ease-out forwards;
+            transform: translate(-50%, -50%);
+            will-change: transform, opacity, width, height;
+        }
+
+        @keyframes bubblePop {
+            0% { width: 6px; height: 6px; opacity: 1; border-width: 1px; }
+            50% { opacity: 0.8; border-width: 0.8px; }
+            100% { width: 40px; height: 40px; opacity: 0; border-width: 0.4px; box-shadow: 0 0 15px rgba(227, 10, 23, 0), inset 0 0 8px rgba(255, 0, 0, 0); }
+        }
+
+        .enter-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: var(--z-overlay);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            overflow: hidden;
+            touch-action: none;
+            padding: 1.5rem;
+        }
+
+        .enter-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .enter-logo {
+            width: clamp(45px, 12vw, 90px);
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 6px rgba(152, 133, 104, 0.6));
+            pointer-events: none;
+        }
+
+        .enter-title {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 5vw, 2.2rem);
+            font-weight: 900;
+            color: var(--color-gold);
+            text-shadow: 0 0 12px rgba(152, 133, 104, 0.8);
+            letter-spacing: 0.05em;
+            text-align: center;
+            animation: glitch 1.5s infinite;
+            margin-bottom: 0.7rem;
+        }
+
+        .typewriter-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 1.5rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .typewriter-text {
+            font-family: var(--font-mono);
+            font-size: clamp(0.4rem, 1.8vw, 0.55rem);
+            letter-spacing: 0.2em;
+            color: var(--color-typewriter);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid var(--color-typewriter);
+            animation: blinkCursor 0.8s infinite;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @keyframes blinkCursor {
+            0%, 100% { border-color: var(--color-typewriter); }
+            50% { border-color: transparent; }
+        }
+
+        .enter-subtitle {
+            font-size: clamp(0.4rem, 1.5vw, 0.5rem);
+            letter-spacing: 0.3em;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+            text-align: center;
+        }
+
+        .enter-hint {
+            position: absolute;
+            bottom: 1.5rem;
+            font-size: 0.5rem;
+            color: #888;
+            letter-spacing: 0.2em;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(1px, -1px); }
+            60% { transform: translate(-0.5px, 0.5px); }
+            80% { transform: translate(0.5px, -0.5px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .hero-section { padding: 2.5rem 1.5rem; }
+        }
+        @media (min-width: 1024px) {
+            .hero-section { padding: 2.5rem 2rem; }
+        }
+
+        .system-override {
+            margin-bottom: 0.8rem;
+            opacity: 0;
+            animation: fadeInDown 0.6s ease 0.2s forwards;
+        }
+
+        .system-override span {
+            font-size: 0.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container {
+            position: relative;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: scaleIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s forwards;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .logo-backdrop {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 240px;
+            aspect-ratio: 720 / 399;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .logo-backdrop img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 70%);
+            mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 70%);
+        }
+
+        @media (min-width: 768px) { .logo-backdrop { max-width: 300px; } }
+        @media (min-width: 1024px) { .logo-backdrop { max-width: 360px; } }
+
+        .logo-wrapper {
+            width: clamp(3rem, 10vw, 5.5rem);
+            height: clamp(3rem, 10vw, 5.5rem);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1.5px solid transparent;
+            border-top-color: var(--color-accent);
+            border-right-color: var(--color-accent);
+            animation: spin 3s linear infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            filter: drop-shadow(0 0 4px var(--color-accent));
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            filter: drop-shadow(0 0 10px rgba(227, 10, 23, 0.6));
+            transition: filter var(--transition-fast);
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .team-name {
+            margin-top: 0.7rem;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.6s ease 0.8s forwards;
+        }
+
+        .team-name a {
+            display: inline-block;
+            padding: 2px 5px;
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .team-name a:hover {
+            border-color: var(--color-accent);
+            background: rgba(227, 10, 23, 0.1);
+            transform: scale(1.05);
+        }
+        .team-name a:active { transform: scale(0.95); }
+
+        .team-name img {
+            max-width: 120px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .hacked-message {
+            text-align: center;
+            max-width: 100%;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+            padding: 0 1rem;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hacked-message h1 {
+            font-size: clamp(1rem, 5vw, 2.8rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            word-break: break-word;
+        }
+
+        .hacked-by { color: var(--color-text); }
+        .hacker-name {
+            color: var(--color-accent);
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+
+        .hacker-link {
+            display: inline-block;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .access-badge {
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 1s forwards;
+            display: flex;
+            justify-content: center;
+        }
+
+        .access-badge div {
+            border: 1px solid var(--color-accent);
+            padding: 0.3rem 0.3rem;
+            transition: background var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .access-badge div:hover {
+            background: rgba(227, 10, 23, 0.15);
+        }
+
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 4px var(--color-accent), 0 0 8px var(--color-accent);
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.6;
+            }
+        }
+
+        .access-badge span {
+            font-size: 0.45rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            animation: neonFlicker 2s infinite;
+            line-height: 1;
+            display: block;
+        }
+
+        .main-typewriter-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 1.5rem;
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 1.2s forwards;
+        }
+
+        .greetz-section {
+            padding: 0 1rem 2.5rem;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) { .greetz-section { padding: 0 1.5rem 2.5rem; } }
+        @media (min-width: 1024px) { .greetz-section { padding: 0 2rem 2.8rem; } }
+
+        .greetz-header {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .greetz-header .label {
+            font-size: 0.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .greetz-header h2 {
+            font-size: clamp(1rem, 4.5vw, 1.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            letter-spacing: -0.02em;
+        }
+
+        .greetz-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            max-width: 26rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .greetz-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+                padding: 0;
+            }
+        }
+
+        .greetz-card {
+            background-color: var(--color-card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-card-border);
+            height: clamp(3rem, 10vw, 5rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: border-color var(--transition-smooth), transform var(--transition-fast);
+            opacity: 0;
+            transform: translateY(20px);
+            overflow: hidden;
+            position: relative;
+            padding: 0.5rem;
+            will-change: transform, opacity;
+        }
+
+        .greetz-card.visible {
+            animation: fadeInUpCard 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUpCard {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .greetz-card:hover {
+                border-color: var(--color-accent);
+                transform: scale(1.05);
+            }
+            .greetz-card:hover .name,
+            .greetz-card:hover .tag {
+                color: var(--color-accent);
+            }
+            .greetz-card:hover .card-overlay {
+                background: linear-gradient(to top, rgba(227, 10, 23, 0.1), transparent);
+            }
+        }
+
+        .greetz-card .name {
+            font-size: clamp(0.65rem, 2.5vw, 1.1rem);
+            font-weight: 900;
+            font-family: var(--font-display);
+            color: var(--color-text);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            transition: color var(--transition-smooth);
+            z-index: 1;
+        }
+
+        .greetz-card .tag {
+            font-size: clamp(0.35rem, 1vw, 0.4rem);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+            margin-top: 0.2rem;
+            transition: color var(--transition-smooth);
+            z-index: 1;
+        }
+
+        .greetz-card .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            transition: background var(--transition-smooth);
+            pointer-events: none;
+        }
+
+        .footer {
+            padding: 0.8rem 1rem;
+            text-align: center;
+            /* Sonsuz çizgi kaldırıldı */
+            border-top: none;
+            position: relative;
+        }
+
+        /* Gradient ile fade-out olan kısa çizgi */
+        .footer::before {
+            content: '';
+            display: block;
+            width: 250px;                                          /* daha uzun */
+            max-width: 70%;                                        /* mobilde taşmasın */
+            height: 1px;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 15%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.05) 85%,
+                transparent 100%
+            );
+            margin: 0 auto 0.8rem auto;
+        }
+
+        @media (min-width: 768px) { 
+            .footer { padding: 1rem 1.5rem; }
+            .footer::before { 
+                width: 400px;                                      /* masaüstünde daha da uzun */
+                max-width: 60%;
+            }
+        }
+        @media (min-width: 1024px) { 
+            .footer { padding: 1.2rem 2rem; }
+            .footer::before { 
+                width: 500px;                                      /* büyük ekranda en uzun */
+                max-width: 50%;
+            }
+        }
+
+        .footer p {
+            font-size: 0.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        ::selection {
+            background: var(--color-accent);
+            color: var(--color-text);
+        }
+        ::-moz-selection {
+            background: var(--color-accent);
+            color: var(--color-text);
+        }
+
+        *:focus { outline: none; }
+        *:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+            border-radius: var(--radius-sm);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+    </style>
+</head>
+<body class="no-scroll">
+    <div id="enterOverlay" class="enter-overlay" role="dialog" aria-label="Giriş ekranı">
+        <img src="https://i.imgur.com/focsHhK.png" alt="Logo" class="enter-logo" width="90" height="90">
+        <div class="enter-title">CLICK TO ENTER</div>
+        <div class="typewriter-container" aria-live="polite">
+            <span id="typewriter" class="typewriter-text"></span>
+        </div>
+        <div class="enter-subtitle">CLICK ANYWHERE TO ENTER</div>
+        <div class="enter-hint">[ SYSTEM LOCKED ]</div>
+    </div>
+
+    <div id="mainContent">
+        <video autoplay loop muted playsinline class="video-bg" preload="auto" id="bgVideo"></video>
+        <div class="overlay"></div>
+        <div class="dark-gradient"></div>
+        <div class="scanlines"></div>
+        <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+        <div class="content">
+            <section class="hero-section">
+                <div class="system-override"><span>SYSTEM OVERRIDE</span></div>
+                <div class="logo-container">
+                    <div class="logo-backdrop"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjsPyPdIu7-_sbnJcqbxynIx6MLB84Wg4NDnIlozmpZA&s=10" alt="Banner arkaplan" loading="lazy"></div>
+                    <div class="logo-wrapper">
+                        <div class="logo-ring"></div>
+                        <div class="logo-circle">
+                            <img src="https://i.hizliresim.com/m9RCVr.png" alt="Strongsaire Logo" width="88" height="88">
+                        </div>
+                    </div>
+                    <div class="team-name">
+                        <a href="https://www.turkhackteam.org" target="_blank" rel="noopener noreferrer" title="Turk Hack Team'i Ziyaret Et">
+                            <img src="https://www.turkhackteam.org/data/assets/logo_default/logo.png" alt="Turk Hack Team Logo" width="120" height="40">
+                        </a>
+                    </div>
+                </div>
+                <div class="hacked-message">
+                    <h1><span class="hacked-by"></span><br>
+                    <a id="hackerProfileLink" target="_blank" rel="noopener noreferrer" class="hacker-link"><span class="hacker-name"></span></a></h1>
+                </div>
+                <div class="access-badge"><div><span>ACCESS GRANTED</span></div></div>
+                <div class="main-typewriter-container" aria-live="polite">
+                    <span id="mainTypewriter" class="typewriter-text"></span>
+                </div>
+            </section>
+
+            <section class="greetz-section" aria-labelledby="greetz-heading">
+                <div class="greetz-header">
+                    <p class="label">ÖZEL TEŞEKKÜRLER</p>
+                    <h2 id="greetz-heading">GREETZ</h2>
+                </div>
+                <div class="greetz-grid" id="greetzGrid"></div>
+            </section>
+
+            <footer class="footer">
+                <p>© 2026 TURK HACK TEAM • ALL SYSTEMS COMPROMISED</p>
+            </footer>
+        </div>
+    </div>
+
+    <audio id="bgMusic1" loop preload="none"></audio>
+    <audio id="bgMusic2" preload="none"></audio>
+
+    <script>
+        (function() {
+            // =============================================
+            // TEK DEĞİŞKEN: BU İSMİ DEĞİŞTİR, HER YER GÜNCELLENSİN
+            // =============================================
+            const HACKER_NAME = "Strongsaire";
+
+            // ---------- TÜM DEĞİŞTİRİLEBİLİR AYARLAR ----------
+            const CONFIG = {
+                hackerName: HACKER_NAME,
+                hackerProfileUrl: "https://www.turkhackteam.org/uye/strongsaire-exe.532432/",
+                bgMusic: "https://files.catbox.moe/ywkfsb.mp3",
+                effectMusic: "https://files.catbox.moe/0gko4k.mp3",
+                video: "https://files.catbox.moe/00v70j.mp4",
+                typewriterPhrases: [
+                    "İstediğimiz zaman , istediğimiz yerdeyiz..."
+                ],
+                greetzList: [
+                    { name: "bh80" },
+                    { name: "arsenik" }
+                ]
+            };
+
+            // Hacker profil linkini ayarla - DOM yüklendiğinde hemen çalışsın
+            function setupHackerLink() {
+                const hackerProfileLink = document.getElementById('hackerProfileLink');
+                if (hackerProfileLink && CONFIG.hackerProfileUrl) {
+                    hackerProfileLink.setAttribute('href', CONFIG.hackerProfileUrl);
+                }
+            }
+            setupHackerLink();
+
+            // Ses ve video kaynaklarını ayarla
+            const audio1 = document.getElementById('bgMusic1');
+            const audio2 = document.getElementById('bgMusic2');
+            const bgVideo = document.getElementById('bgVideo');
+
+            if (audio1) {
+                audio1.src = CONFIG.bgMusic;
+                audio1.load();
+            }
+            if (audio2) {
+                audio2.src = CONFIG.effectMusic;
+                audio2.load();
+            }
+            if (bgVideo) {
+                bgVideo.src = CONFIG.video;
+                bgVideo.load();
+            }
+
+            const typewriterPhrases = CONFIG.typewriterPhrases;
+            const greetzList = CONFIG.greetzList;
+
+            const typewriterEl = document.getElementById('typewriter');
+            if (typewriterEl) {
+                let phraseIndex = 0;
+                let charIndex = 0;
+                let isDeleting = false;
+                const typingSpeed = 80;
+                const deletingSpeed = 40;
+                const pauseEnd = 2000;
+                const pauseStart = 500;
+
+                function typeWriterLoop() {
+                    if (!typewriterEl) return;
+                    const currentPhrase = typewriterPhrases[phraseIndex];
+                    if (!isDeleting) {
+                        typewriterEl.textContent = currentPhrase.substring(0, charIndex + 1);
+                        charIndex++;
+                        if (charIndex === currentPhrase.length) {
+                            isDeleting = true;
+                            setTimeout(typeWriterLoop, pauseEnd);
+                            return;
+                        }
+                        setTimeout(typeWriterLoop, typingSpeed);
+                    } else {
+                        typewriterEl.textContent = currentPhrase.substring(0, charIndex - 1);
+                        charIndex--;
+                        if (charIndex === 0) {
+                            isDeleting = false;
+                            phraseIndex = (phraseIndex + 1) % typewriterPhrases.length;
+                            setTimeout(typeWriterLoop, pauseStart);
+                            return;
+                        }
+                        setTimeout(typeWriterLoop, deletingSpeed);
+                    }
+                }
+                setTimeout(typeWriterLoop, 500);
+            }
+
+            let periodicInterval = null;
+            let fadeInterval = null;
+            let fadeTimeout = null;
+
+            function cancelFade() {
+                if (fadeInterval) { clearInterval(fadeInterval); fadeInterval = null; }
+                if (fadeTimeout) { clearTimeout(fadeTimeout); fadeTimeout = null; }
+            }
+
+            function smoothVolumeChange(audioEl, startVol, endVol, durationMs, onComplete) {
+                cancelFade();
+                if (!audioEl || Math.abs(startVol - endVol) < 0.001) {
+                    if (onComplete) onComplete();
+                    return;
+                }
+                const steps = 10;
+                const stepTime = durationMs / steps;
+                const delta = (endVol - startVol) / steps;
+                let currentStep = 0;
+                audioEl.volume = startVol;
+                fadeInterval = setInterval(() => {
+                    currentStep++;
+                    let newVol = startVol + delta * currentStep;
+                    newVol = delta > 0 ? Math.min(endVol, newVol) : Math.max(endVol, newVol);
+                    audioEl.volume = newVol;
+                    if (currentStep >= steps) {
+                        clearInterval(fadeInterval);
+                        fadeInterval = null;
+                        audioEl.volume = endVol;
+                        if (onComplete) onComplete();
+                    }
+                }, stepTime);
+            }
+
+            function fadeOutMusic1(callback) {
+                if (!audio1) return;
+                smoothVolumeChange(audio1, audio1.volume, 0.05, 100, callback);
+            }
+
+            function fadeInMusic1(callback) {
+                if (!audio1) return;
+                smoothVolumeChange(audio1, audio1.volume, 0.2, 100, callback);
+            }
+
+            function playEffectAudio() {
+                if (!audio2) return;
+                audio2.pause();
+                audio2.currentTime = 0;
+                audio2.play().catch(e => console.warn("Effect audio play error:", e));
+            }
+
+            function onAudio2Play() { fadeOutMusic1(); }
+            function onAudio2Ended() { fadeInMusic1(); }
+
+            function startPeriodicEffect() {
+                if (periodicInterval) clearInterval(periodicInterval);
+                periodicInterval = setInterval(() => { playEffectAudio(); }, 25000);
+            }
+
+            let audioStarted = false;
+
+            function startAudioSession() {
+                if (audioStarted) return;
+                audioStarted = true;
+                if (audio1) {
+                    audio1.volume = 0.2;
+                    audio1.play().catch(e => console.warn("Audio1 play error:", e));
+                }
+                if (audio2) {
+                    audio2.volume = 0.2;
+                    audio2.removeEventListener('play', onAudio2Play);
+                    audio2.removeEventListener('ended', onAudio2Ended);
+                    audio2.addEventListener('play', onAudio2Play);
+                    audio2.addEventListener('ended', onAudio2Ended);
+                }
+                playEffectAudio();
+                startPeriodicEffect();
+            }
+
+            function startMainTypewriter() {
+                const mainTw = document.getElementById('mainTypewriter');
+                if (!mainTw) return;
+                const phrases = typewriterPhrases;
+                let phraseIndex = 0;
+                let charIndex = 0;
+                let isDeleting = false;
+                const typingSpeed = 80;
+                const deletingSpeed = 40;
+                const pauseEnd = 2000;
+                const pauseStart = 500;
+
+                function loop() {
+                    if (!mainTw) return;
+                    const current = phrases[phraseIndex];
+                    if (!isDeleting) {
+                        mainTw.textContent = current.substring(0, charIndex + 1);
+                        charIndex++;
+                        if (charIndex === current.length) {
+                            isDeleting = true;
+                            setTimeout(loop, pauseEnd);
+                            return;
+                        }
+                        setTimeout(loop, typingSpeed);
+                    } else {
+                        mainTw.textContent = current.substring(0, charIndex - 1);
+                        charIndex--;
+                        if (charIndex === 0) {
+                            isDeleting = false;
+                            phraseIndex = (phraseIndex + 1) % phrases.length;
+                            setTimeout(loop, pauseStart);
+                            return;
+                        }
+                        setTimeout(loop, deletingSpeed);
+                    }
+                }
+                loop();
+            }
+
+            const enterOverlay = document.getElementById('enterOverlay');
+            if (enterOverlay) {
+                enterOverlay.addEventListener('click', () => {
+                    enterOverlay.classList.add('hidden');
+                    document.documentElement.classList.remove('no-scroll');
+                    document.body.classList.remove('no-scroll');
+                    startAudioSession();
+                    startMainTypewriter();
+                });
+            }
+
+            document.addEventListener('contextmenu', event => {
+                event.preventDefault();
+                alert('TURKHACKTEAM | İndexi kopyalamak yasaktır.');
+            });
+
+            document.addEventListener('keydown', event => {
+                if (
+                    event.keyCode === 123 ||
+                    (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 74)) ||
+                    (event.ctrlKey && event.keyCode === 85)
+                ) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+            document.addEventListener('dragstart', event => event.preventDefault());
+
+            document.addEventListener('click', function(e) {
+                if (enterOverlay && !enterOverlay.classList.contains('hidden')) return;
+                const bubble = document.createElement('div');
+                bubble.className = 'click-bubble';
+                bubble.style.left = e.clientX + 'px';
+                bubble.style.top = e.clientY + 'px';
+                document.body.appendChild(bubble);
+                bubble.addEventListener('animationend', function() { bubble.remove(); });
+            });
+
+            (function initParticles() {
+                const canvas = document.getElementById('particleCanvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                let width, height;
+
+                function resizeCanvas() {
+                    width = window.innerWidth;
+                    height = window.innerHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                const particles = [];
+                const particleCount = 40;
+
+                class Particle {
+                    constructor() {
+                        this.x = Math.random() * width;
+                        this.y = Math.random() * height;
+                        this.size = Math.random() * 1.2 + 0.25;
+                        this.speedX = Math.random() * 0.35 - 0.175;
+                        this.speedY = Math.random() * 0.35 - 0.175;
+                        this.opacity = Math.random() * 0.45 + 0.2;
+                    }
+                    update() {
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+                        if (this.x > width) this.x = 0;
+                        if (this.x < 0) this.x = width;
+                        if (this.y > height) this.y = 0;
+                        if (this.y < 0) this.y = height;
+                    }
+                    draw() {
+                        ctx.fillStyle = `rgba(227, 10, 23, ${this.opacity})`;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+
+                function animate() {
+                    if (!canvas || !ctx) return;
+                    ctx.clearRect(0, 0, width, height);
+                    for (let p of particles) {
+                        p.update();
+                        p.draw();
+                    }
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            })();
+
+            (function buildGreetz() {
+                const grid = document.getElementById('greetzGrid');
+                if (!grid) return;
+
+                const fragment = document.createDocumentFragment();
+                greetzList.forEach((person, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'greetz-card';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.innerHTML = `
+                        <span class="name">${person.name}</span>
+                        <span class="tag">SAYGI VE SEVGİLER</span>
+                        <div class="card-overlay"></div>
+                    `;
+                    fragment.appendChild(card);
+                });
+                grid.appendChild(fragment);
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                document.querySelectorAll('.greetz-card').forEach(card => observer.observe(card));
+            })();
+
+            function startHackedTypewriter() {
+                const hackedBySpan = document.querySelector('.hacked-message .hacked-by');
+                const hackerNameSpan = document.querySelector('.hacked-message .hacker-name');
+                if (!hackedBySpan || !hackerNameSpan) return;
+                const text1 = "HACKED BY";
+                const text2 = CONFIG.hackerName;
+                let index1 = 0;
+                let index2 = 0;
+                const typingSpeed = 80;
+                function typeFirst() {
+                    if (index1 < text1.length) {
+                        hackedBySpan.textContent += text1.charAt(index1);
+                        index1++;
+                        setTimeout(typeFirst, typingSpeed);
+                    } else {
+                        setTimeout(typeSecond, 200);
+                    }
+                }
+                function typeSecond() {
+                    if (index2 < text2.length) {
+                        hackerNameSpan.textContent += text2.charAt(index2);
+                        index2++;
+                        setTimeout(typeSecond, typingSpeed);
+                    }
+                }
+                typeFirst();
+            }
+            startHackedTypewriter();
+
+            (function initTitleTypewriter() {
+                const baseTitle = " | Turk Hack Team";
+                const textToType = "Hacked By " + CONFIG.hackerName;
+                let charIndex = 0;
+                let isDeleting = false;
+                const typingSpeed = 150;
+                const deletingSpeed = 80;
+                const pauseEnd = 2000;
+                const pauseStart = 500;
+
+                function updateTitle() {
+                    if (!isDeleting) {
+                        document.title = textToType.substring(0, charIndex + 1) + baseTitle;
+                        charIndex++;
+                        if (charIndex === textToType.length) {
+                            isDeleting = true;
+                            setTimeout(updateTitle, pauseEnd);
+                            return;
+                        }
+                        setTimeout(updateTitle, typingSpeed);
+                    } else {
+                        document.title = textToType.substring(0, charIndex - 1) + baseTitle;
+                        charIndex--;
+                        if (charIndex === 0) {
+                            isDeleting = false;
+                            setTimeout(updateTitle, pauseStart);
+                            return;
+                        }
+                        setTimeout(updateTitle, deletingSpeed);
+                    }
+                }
+                updateTitle();
+            })();
+
+            window.addEventListener('beforeunload', () => {
+                if (periodicInterval) clearInterval(periodicInterval);
+                cancelFade();
+                if (audio2) {
+                    audio2.removeEventListener('play', onAudio2Play);
+                    audio2.removeEventListener('ended', onAudio2Ended);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
