@@ -7,20 +7,11 @@ Gerçek bir saldırı amacı taşımaz; yalnızca **eğlence**, **farkındalık*
 
 - **🎬 Video arka plan** – `catbox.moe` üzerinden yayınlanan döngülü video
 - **🎵 Müzik & efekt sesleri** – İki ayrı ses kanalı (arka plan müziği ve periyodik efekt)
-- **💻 Matrix yağmuru** – Kanji ve sayılarla kırmızı tonlu matris efekti
-- **🌐 IP yağmuru** – Rastgele IP adreslerinin ekrandan düşüşü
 - **🗺️ Dünya haritası ışınları** – İstanbul gibi hedeflere çizilen kırmızı ışınlar
 - **✨ Parçacık sistemi** – Müziğe duyarlı hareket eden parçacıklar
 - **🖱️ Özel imleç** – Kırmızı artı (+) şeklinde özel cursor
 - **🖱️ Tıklama baloncukları** – Tıklanan noktada büyüyüp kaybolan kırmızı artılar
-- **🧠 Subliminal mesajlar** – Rastgele beliren korkutucu uyarılar
-- **🔔 Bildirim alanı** – Trojan, firewall gibi sahte sistem uyarıları
-- **📟 Sürüklenebilir terminal** – Komut satırı simülasyonu (`scan`, `hack`, `ddos`, `whoami`…)
-- **💀 Kafatası animasyonu** – Göz kırpan skull
-- **🌩️ Ekran çatlaması** – Tıklamada beyaz çatlak efekti
-- **📊 DDoS sayacı** – Gerçek zamanlı artan sahte paket sayısı
-- **🕐 Görev çubuğu** – Saat ve sistem uyarıları
-- **⌨️ Klavye kod yağmuru** – Tuşa basıldığında karakter dökülmesi
+- **🧠 Subliminal mesajlar** – Rastgele beliren slogan mesajı
 - **🔒 Enter kilidi** – Sayfaya girmeden önce "CLICK TO ENTER" perdesi
 - **✍️ Typewriter efektleri** – Hem giriş perdesinde hem ana sayfada yazı animasyonu
 - **👥 Greetz bölümü** – Teşekkür kartları (scroll ile açığa çıkıyor)
